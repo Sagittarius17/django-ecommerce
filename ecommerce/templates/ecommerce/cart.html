@@ -1,0 +1,61 @@
+{% extends 'ecommerce/main.html' %}
+{% load static %}
+{% block content %}
+<div class="container mx-auto px-4 py-6 mt-10">
+     <h1 class="text-2xl font-bold mb-4">Your Cart</h1>
+ 
+     <!-- Cart items -->
+     <div class="overflow-x-auto border-[5px]">
+         <table class="min-w-full bg-white border rounded">
+             <thead>
+                 <tr>
+                     <th class="text-left py-2 px-3">Product</th>
+                     <th class="text-left py-2 px-3 hidden md:table-cell">Name</th>
+                     <th class="text-left py-2 px-3">Quantity</th>
+                     <th class="text-left py-2 px-3">Price</th>
+                     <th class="text-left py-2 px-3">Total</th>
+                 </tr>
+             </thead>
+
+             {% for item in items%}
+             <tbody>
+                 <!-- Example cart item -->
+                 <tr>
+                     <td class="py-2 px-3">
+                         <div class="flex items-center">
+                             <img src="{{item.product.imageURL}}" alt="Product Image" class="h-16 w-16 object-cover mr-2 md:mr-0">
+                             <span class="md:hidden">{{item.product.name}}</span>
+                         </div>
+                     </td>
+                     <td class="hidden md:table-cell py-2 px-3">{{item.product.name}}</td>
+                     <td class="flex flex-row items-center py-2 px-2">
+                        <p class='pl-6'>{{item.quantity}}</p>
+                        <div class='flex-row pl-2'>
+                            <div data-product={{item.product.id}} data-action='add' class='triangle-up flex w-3 h-3 m-1 cursor-pointer bg-black update-cart'></div>
+                            <div data-product={{item.product.id}} data-action='remove' class='flex w-3 h-3 m-1 cursor-pointer bg-slate-500 update-cart'></div>
+                        </div>
+                     </td>
+                     <td class="py-2 px-3">₹{{item.product.price|floatformat:2}}</td>
+                     <td class="py-2 px-3">₹{{item.get_total}}</td>
+                 </tr>
+                 <!-- Add more items as needed -->
+             </tbody>
+             {% endfor %}
+         </table>
+     </div>
+ 
+     <!-- Checkout section -->
+     <div class="flex flex-col md:flex-row justify-between border-[5px] items-center mt-6">
+        <div class="ml-2">
+            <span class="text-lg font-semibold">Total items: </span>
+            <span class="text-lg">{{order.get_cart_items}}</span>
+        </div>
+         <div class="ml-2">
+             <span class="text-lg font-semibold">Total price: </span>
+             <span class="text-lg">₹{{order.get_cart_total}}</span>
+         </div>
+         <a href="{% url 'checkout' %}" class="bg-blue-500 text-white px-6 py-2 mt-0 md:mt-0 hover:bg-blue-600 focus:outline-none">Checkout</a>
+     </div>
+ </div>
+ 
+{% endblock content %}

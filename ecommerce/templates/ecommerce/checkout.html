@@ -1,0 +1,75 @@
+{% extends 'ecommerce/main.html' %}
+{% load static %}
+{% block content %}
+<div class="container mx-auto px-4 py-6">
+     <h1 class="text-2xl font-bold mb-6">Checkout</h1>
+ 
+     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+ 
+         <!-- Billing and Shipping Details -->
+         <div>
+             <h2 class="text-xl font-semibold mb-4">Billing & Shipping</h2>
+ 
+             <div class="mb-4">
+                 <label class="block text-sm mb-2" for="fullname">Full Name</label>
+                 <input type="text" class="p-2 border rounded w-full" id="fullname" placeholder="John Doe">
+             </div>
+ 
+             <div class="mb-4">
+                 <label class="block text-sm mb-2" for="address">Address</label>
+                 <input type="text" class="p-2 border rounded w-full" id="address" placeholder="123 Main St">
+             </div>
+ 
+             <div class="mb-4">
+                 <label class="block text-sm mb-2" for="city">City</label>
+                 <input type="text" class="p-2 border rounded w-full" id="city" placeholder="Cityville">
+             </div>
+ 
+             <div class="mb-4">
+                 <label class="block text-sm mb-2" for="zipcode">Zip Code</label>
+                 <input type="text" class="p-2 border rounded w-full" id="zipcode" placeholder="12345">
+             </div>
+         </div>
+ 
+         <!-- Payment Information -->
+         <div>
+             <h2 class="text-xl font-semibold mb-4">Payment Information</h2>
+ 
+             <div class="mb-4">
+                 <label class="block text-sm mb-2" for="cardnumber">Card Number</label>
+                 <input type="text" class="p-2 border rounded w-full" id="cardnumber" placeholder="1234 5678 1234 5678">
+             </div>
+ 
+             <div class="mb-4">
+                 <label class="block text-sm mb-2" for="expirydate">Expiry Date</label>
+                 <input type="text" class="p-2 border rounded w-full" id="expirydate" placeholder="MM/YY">
+             </div>
+ 
+             <div class="mb-4">
+                 <label class="block text-sm mb-2" for="cvv">CVV</label>
+                 <input type="text" class="p-2 border rounded w-full" id="cvv" placeholder="123">
+             </div>
+         </div>
+     </div>
+ 
+     <!-- Order Summary -->
+     <div class="mt-6">
+         <h2 class="text-xl font-semibold mb-4">Order Summary</h2>
+ 
+         <div class="flex justify-between mb-4">
+             <span>Total items</span>
+             <span>{{order.get_cart_items}}</span>
+         </div>
+ 
+         <div class="flex justify-between font-bold">
+             <span>Total price</span>
+             <span>{{order.get_cart_total}}</span>
+         </div>
+ 
+         <button class="bg-blue-500 text-white w-full mt-6 py-2 rounded hover:bg-blue-600 focus:outline-none">
+             Confirm and Pay
+         </button>
+     </div>
+ </div>
+ 
+{% endblock content %}
