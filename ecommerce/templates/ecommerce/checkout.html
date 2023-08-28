@@ -39,6 +39,9 @@
         
                 <hr>
                 <input id='form-button' type='submit' value='Continue' class='w-full h-10 rounded bg-red-500'>
+                <button id='make-payment' class="bg-blue-600 text-white w-full mt-6 py-2 rounded hover:bg-cyan-500 focus:outline-none">
+                    Confirm and Pay
+                </button>
             </form>
         </div>
 
@@ -69,14 +72,15 @@
 <script>
     let shipping = '{{order.shipping}}'
 
+    let total = '{{order.get_cart_total}}'
+
+
     if (shipping == 'False') {
         document.getElementById('shipping-info').innerHTML = '';
     }
 
-    if (user != 'AnonyumousUser') {
+    if (user != 'AnonymousUser') {
         document.getElementById('user-info').innerHTML = ''
-    } else {
-        document.getElementById("user-info").classList.remove( "hidden");  // show the form
     }
 
     if (shipping == 'False' && user != 'AnonymousUser'){
@@ -97,8 +101,61 @@
     document.getElementById('make-payment').addEventListener('click', function(e) {
         submitFormData()
     })
+
     function submitFormData() {
-        console.log('button clicked!')
+        console.log('Button clicked!')
+
+        let userFormData = {
+            'name' = null,
+            'email' = null,
+            'total' = total,
+        }
+
+        let shippingInfo = {
+            'address' = null,
+            'city' = null,
+            'state' = null,
+            'zipcode' = null,
+        }
+
+        if (shipping != 'False') {
+            shippingInfo.address = form.address.value
+            shippingInfo.city = form.city.value
+            shippingInfo.state = form.state.value
+            shippingInfo.zipcode = form.zipcode.value
+        }
+
+        if (user == 'AnonymousUser') {
+            userFormData.name = form.name.value
+            userFormData.email = form.email.value
+        }
+
+        console.log('Shipping Info:', shippingInfo)
+	    console.log('User Info:', userFormData)
+
+        let url = '/process_ordere/'
+        fetch(url, {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrftoken
+            },
+            body: JSON.stringify({'form': userFormData, 'shipping': shippingInfo})
+        })
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then((data) => {
+            console.log('data:', data);
+            alert('Transaction complete!')
+            window.location.href = "{% url 'store' %}"
+        })
+        .catch((error) => {
+            console.log('There was a problem with the fetch operation:', error.message);
+        });
     }
 </script>
 

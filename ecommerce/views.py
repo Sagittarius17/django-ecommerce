@@ -86,3 +86,7 @@ def updateItem(request):
 
     except Exception as e:
         return JsonResponse({'status': 'error', 'error': str(e)}, status=500)
+    
+def processOrder(request):
+    print('Data:', request.body)
+    return JsonResponse('Payment complete', safe=False)
