@@ -2,84 +2,67 @@
 {% load static %}
 {% block content %}
 <div class="container mx-auto px-4 py-6 bg-gray-600 text-white">
-     <h1 class="text-2xl font-bold mb-6">Checkout</h1>
-
-    <div id='form' class="grid grid-cols-1 md:grid-cols-3 gap-6">
-
-        <!-- Billing and Shipping Details -->
-        <div class='flex flex-col bg-orange-300 h-fit p-2 mb-4'>
-            <div class='mb-4'>
-                <input required class="p-2 border rounded w-full" type='text' name='name' placeholder='Name'>
-            </div>
-
-            <div class='mb4'>
-                <input required class="p-2 border rounded w-full" type='email' name='email' placeholder='Email'>
-            </div>
+    <h1 class="text-xl font-bold mb-2">Checkout</h1>
+    <div class="grid grid-cols-1 md:grid-cols-1 gap-6">
+        <!-- Shipping Details -->
+        <div id='form-wrapper'>
+            <form id='form'>
+                <div id='user-info' class='flex flex-col bg-orange-300 h-fit p-2 mb-4'>
+                    <div class='mb-2'>
+                        <input required class="p-2 border rounded w-full" type='text' name='name' placeholder='Name'>
+                    </div>
+        
+                    <div class=''>
+                        <input required class="p-2 border rounded w-full" type='email' name='email' placeholder='Email'>
+                    </div>
+                </div>
+        
+                <div id='shipping-info'>
+                    <h2 class="text-xl font-semibold mb-4">Billing & Shipping</h2>
+                    <div class="mb-2">
+                        <label class="block text-sm mb-2" for="fullname">Full Name</label>
+                        <input type="text" class="p-2 border rounded w-full" id="fullname" placeholder="John Doe">
+                    </div>
+                    <div class="mb-2">
+                        <label class="block text-sm mb-2" for="address">Address</label>
+                        <input type="text" class="p-2 border rounded w-full" id="address" placeholder="123 Main St">
+                    </div>
+                    <div class="mb-2">
+                        <label class="block text-sm mb-2" for="city">City</label>
+                        <input type="text" class="p-2 border rounded w-full" id="city" placeholder="Cityville">
+                    </div>
+                    <div class="mb-2">
+                        <label class="block text-sm mb-2" for="zipcode">Zip Code</label>
+                        <input type="text" class="p-2 border rounded w-full" id="zipcode" placeholder="12345">
+                    </div>
+                </div>
+        
+                <hr>
+                <input id='form-button' type='submit' value='Continue' class='w-full h-10 rounded bg-red-500'>
+            </form>
         </div>
 
-        <!-- Billing and Shipping Details -->
-        <div id='shipping'>
-            <h2 class="text-xl font-semibold mb-4">Billing & Shipping</h2>
+        <!-- Order Summary -->
+        <div class=''>
+            <h2 class="text-xl font-semibold mb-4">Order Summary</h2>
 
-            <div class="mb-4">
-                <label class="block text-sm mb-2" for="fullname">Full Name</label>
-                <input type="text" class="p-2 border rounded w-full" id="fullname" placeholder="John Doe">
+            <div class="flex justify-between mb-4">
+                <span>Total items</span>
+                <span>{{order.get_cart_items}}</span>
             </div>
 
-            <div class="mb-4">
-                <label class="block text-sm mb-2" for="address">Address</label>
-                <input type="text" class="p-2 border rounded w-full" id="address" placeholder="123 Main St">
+            <div class="flex justify-between font-bold">
+                <span>Total price</span>
+                <span>{{order.get_cart_total}}</span>
             </div>
 
-            <div class="mb-4">
-                <label class="block text-sm mb-2" for="city">City</label>
-                <input type="text" class="p-2 border rounded w-full" id="city" placeholder="Cityville">
-            </div>
-
-            <div class="mb-4">
-                <label class="block text-sm mb-2" for="zipcode">Zip Code</label>
-                <input type="text" class="p-2 border rounded w-full" id="zipcode" placeholder="12345">
+            <!-- Payment Information -->
+            <div id='payment-info' class='hidden rounded text-center align-middle mt-4'>
+                <button id='make-payment' class="bg-blue-600 text-white w-full mt-6 py-2 rounded hover:bg-cyan-500 focus:outline-none">
+                    Confirm and Pay
+                </button>
             </div>
         </div>
-
-        <!-- Payment Information -->
-        <div id='payment-info'>
-            <h2 class="text-xl font-semibold mb-4">Payment Information</h2>
-
-            <div class="mb-4">
-                <label class="block text-sm mb-2" for="cardnumber">Card Number</label>
-                <input type="text" class="p-2 border rounded w-full" id="cardnumber" placeholder="1234 5678 1234 5678">
-            </div>
-
-            <div class="mb-4">
-                <label class="block text-sm mb-2" for="expirydate">Expiry Date</label>
-                <input type="text" class="p-2 border rounded w-full" id="expirydate" placeholder="MM/YY">
-            </div>
-
-            <div class="mb-4">
-                <label class="block text-sm mb-2" for="cvv">CVV</label>
-                <input type="text" class="p-2 border rounded w-full" id="cvv" placeholder="123">
-            </div>
-        </div>
-    </div>
- 
-     <!-- Order Summary -->
-    <div class="mt-6">
-        <h2 class="text-xl font-semibold mb-4">Order Summary</h2>
-
-        <div class="flex justify-between mb-4">
-            <span>Total items</span>
-            <span>{{order.get_cart_items}}</span>
-        </div>
-
-        <div class="flex justify-between font-bold">
-            <span>Total price</span>
-            <span>{{order.get_cart_total}}</span>
-        </div>
-
-        <button id='form-button' class="bg-blue-500 text-white w-full mt-6 py-2 rounded hover:bg-blue-600 focus:outline-none">
-            Confirm and Pay
-        </button>
     </div>
 </div>
  
@@ -87,7 +70,20 @@
     let shipping = '{{order.shipping}}'
 
     if (shipping == 'False') {
-        document.getElementById('shipping').innerHTML = '';
+        document.getElementById('shipping-info').innerHTML = '';
+    }
+
+    if (user != 'AnonyumousUser') {
+        document.getElementById('user-info').innerHTML = ''
+    } else {
+        document.getElementById("user-info").classList.remove( "hidden");  // show the form
+    }
+
+    if (shipping == 'False' && user != 'AnonymousUser'){
+        //Hide entire form if user is logged in and shipping is false
+        document.getElementById('form-wrapper').classList.add("hidden");
+        //Show payment if logged in user wants to buy an item that does not require shipping
+        document.getElementById('payment-info').classList.remove("hidden");
     }
 
     let form = document.getElementById('form')
@@ -95,8 +91,15 @@
         e.preventDefault()
         console.log('Form submitted')
         document.getElementById('form-button').classList.add('hidden')
-        document.getElementById('payment-info').classList.add('hidden')
+        document.getElementById('payment-info').classList.remove('hidden')
     })
+
+    document.getElementById('make-payment').addEventListener('click', function(e) {
+        submitFormData()
+    })
+    function submitFormData() {
+        console.log('button clicked!')
+    }
 </script>
 
 {% endblock content %}

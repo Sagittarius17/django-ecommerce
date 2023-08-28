@@ -36,9 +36,8 @@
     <body>
         {% include "ecommerce/navbar.html"%}
 
-        <div class="ml-32 w-[80%]">
+        <div class="ml-32 mt-16 w-[80%]">
             {% block content %}
-            {% csrf_token %}
 
             {% endblock content %}
         </div>
