@@ -20,16 +20,16 @@
                 <div id='shipping-info'>
                     <h2 class="text-xl font-semibold mb-4">Billing & Shipping</h2>
                     <div class="mb-2">
-                        <label class="block text-sm mb-2" for="fullname">Full Name</label>
-                        <input type="text" class="p-2 border rounded w-full" id="fullname" placeholder="John Doe">
-                    </div>
-                    <div class="mb-2">
                         <label class="block text-sm mb-2" for="address">Address</label>
                         <input type="text" class="p-2 border rounded w-full" id="address" placeholder="123 Main St">
                     </div>
                     <div class="mb-2">
                         <label class="block text-sm mb-2" for="city">City</label>
                         <input type="text" class="p-2 border rounded w-full" id="city" placeholder="Cityville">
+                    </div>
+                    <div class="mb-2">
+                        <label class="block text-sm mb-2" for="state">State</label>
+                        <input type="text" class="p-2 border rounded w-full" id="state" placeholder="Stateville">
                     </div>
                     <div class="mb-2">
                         <label class="block text-sm mb-2" for="zipcode">Zip Code</label>
@@ -39,9 +39,6 @@
         
                 <hr>
                 <input id='form-button' type='submit' value='Continue' class='w-full h-10 rounded bg-red-500'>
-                <button id='make-payment' class="bg-blue-600 text-white w-full mt-6 py-2 rounded hover:bg-cyan-500 focus:outline-none">
-                    Confirm and Pay
-                </button>
             </form>
         </div>
 
@@ -106,16 +103,16 @@
         console.log('Button clicked!')
 
         let userFormData = {
-            'name' = null,
-            'email' = null,
-            'total' = total,
+            'name' : null,
+            'email' : null,
+            'total' : total,
         }
 
         let shippingInfo = {
-            'address' = null,
-            'city' = null,
-            'state' = null,
-            'zipcode' = null,
+            'address' : null,
+            'city' : null,
+            'state' : null,
+            'zipcode' : null,
         }
 
         if (shipping != 'False') {
@@ -133,7 +130,7 @@
         console.log('Shipping Info:', shippingInfo)
 	    console.log('User Info:', userFormData)
 
-        let url = '/process_ordere/'
+        let url = '/process_order/'
         fetch(url, {
             method: "POST",
             headers: {
