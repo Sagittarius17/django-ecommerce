@@ -4,6 +4,7 @@ from django.http import JsonResponse
 import json
 from django.views.decorators.csrf import csrf_exempt
 import datetime
+from .utils import cookieCart, cookieData
 
 # Create your views here.)
 
@@ -16,15 +17,8 @@ def register(request):
     return render(request, 'ecommerce/register.html', context)
 
 def store(request):
-    if request.user.is_authenticated:
-        customer = request.user.customer
-        order, created = Order.objects.get_or_create(customer=customer, complete=False)
-        items = order.orderitem_set.all()
-        cartItems = order.get_cart_items
-    else:
-        items = []
-        order = {'get_cart_total':0, 'get_cart_items':0, 'shipping': False}
-        cartItems = order['get_cart_items']
+    data = cookieCart(request)
+    cartItems = data['cartItems']
         
     products = Product.objects.all()
     context = {"products": products, 'cartItems': cartItems}
@@ -32,37 +26,19 @@ def store(request):
 
 @csrf_exempt
 def cart(request):
-    if request.user.is_authenticated:
-        customer = request.user.customer
-        order, created = Order.objects.get_or_create(customer=customer, complete=False)
-        items = order.orderitem_set.all()
-        cartItems = order.get_cart_items
-    else:
-        try:
-            cart = json.loads(request.COOKIES['cart'])
-        except:
-            cart = ()
-        print('Cart:', cart)
-        items = []
-        order = {'get_cart_total':0, 'get_cart_items':0, 'shipping': False}
-        cartItems = order['get_cart_items']
-        
-        for i in cart:
-            cartItems += cart[i]['quantity']
+    data = cookieCart(request)
+    cartItems = data['cartItems']
+    order = data['order']
+    items = data['items']
     
     context = {"items": items, 'order': order, 'cartItems': cartItems}
     return render(request, 'ecommerce/cart.html', context)
 
 def checkout(request):
-    if request.user.is_authenticated:
-        customer = request.user.customer
-        order, created = Order.objects.get_or_create(customer=customer, complete=False)
-        items = order.orderitem_set.all()
-        cartItems = order.get_cart_items
-    else:
-        items = []
-        order = {'get_cart_total':0, 'get_cart_items':0, 'shipping': False}
-        cartItems = order['get_cart_items']
+    data = cookieCart(request)
+    cartItems = data['cartItems']
+    order = data['order']
+    items = data['items']
     
     context = {"items": items, 'order': order, 'cartItems': cartItems}
     return render(request, 'ecommerce/checkout.html', context)
