@@ -15,6 +15,12 @@
         <script type="text/javascript">
             // let user = '{{ user_is_authenticated|yesno:"AuthenticatedUser,AnonymousUser" }}';
             let user = '{{request.user}}';
+            document.addEventListener('DOMContentLoaded', function() {
+                if (user != 'AnonymousUser') {
+                    document.getElementById('login_btn').style.display = "none";
+                }
+            });
+            
 
             function getToken(name) {
                 let cookieValue = null;

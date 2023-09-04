@@ -2,7 +2,7 @@
 <!-- Navigation bar -->
 <nav class="bg-gray-800 fixed top-0 w-full">
     <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
-      <div class="relative flex items-center justify-between h-16">
+      <div class="relative flex items-center justify-between h-14">
         <!-- Logo -->
         <div class="flex-shrink-0 flex items-center">
           <a href="{% url 'store' %}" class="text-white font-bold text-lg">StorE</a>
@@ -22,10 +22,15 @@
         <!-- Desktop menu -->
         <div class="hidden sm:block sm:ml-6">
           <div class="flex space-x-4">
-            <a href="{% url 'login' %}" class="flex text-gray-300 items-center bg-gray-700 hover:bg-gray-400 hover:text-white px-2 py-1 rounded-md text-lg font-medium"><strong>Login</strong></a>
-            <a href="{% url 'cart' %}" class="text-gray-300 bg-gray-700 hover:bg-gray-400 hover:text-white px-2 py-1 rounded-md text-lg font-medium">
-              <img class="w-6 h-6 top-2" src="{% static 'images/cart-check.png' %}">
-              <p class='absolute top-2 -right-2 text-sm bg-yellow-600 w-5 h-5 text-center rounded-full'>{{cartItems}}</p>
+            <a href="{% url 'login' %}" id='login_btn' class="flex text-black items-center bg-gray-400 hover:bg-indigo-400 hover:text-white px-2 py-1 rounded-md text-lg font-medium"><strong>Login</strong></a>
+            <a href="#" id='user_profile' class="flex text-black items-center bg-gray-400 hover:bg-indigo-400 px-2 py-1 rounded-md text-lg font-medium">
+                <img src="https://static-assets-web.flixcart.com/batman-returns/batman-returns/p/images/profile-815786.svg" alt="" class="">
+                <span class='ml-2'>{{request.user.customer}}</span>
+            </a>
+            <a href="{% url 'cart' %}" class="flex text-black bg-gray-400 hover:bg-indigo-400 hover:text-white px-2 py-1 rounded-md text-lg font-medium">
+                <img class="relative w-6 h-6 top-1" src="{% static 'images/cart-check.png' %}">
+                <span class='ml-2'>Cart</span>
+                <p class='absolute top-2 -right-2 text-sm bg-yellow-600 w-5 h-5 text-center rounded-full'>{{cartItems}}</p>
             </a>
           </div>
         </div>
@@ -39,10 +44,10 @@
 </nav>
 
 <script>
-  document.getElementById('menu-toggle').addEventListener('click', function() {
-    const mobileMenu = document.getElementById('mobile-menu');
-    mobileMenu.style.display = (mobileMenu.style.display === 'none' || mobileMenu.style.display === '') ? 'block' : 'none';
-  });
+    document.getElementById('menu-toggle').addEventListener('click', function() {
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenu.style.display = (mobileMenu.style.display === 'none' || mobileMenu.style.display === '') ? 'block' : 'none';
+    });
 </script>
 
   
