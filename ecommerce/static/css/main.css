@@ -2,20 +2,41 @@
 @tailwind components;
 @tailwind utilities;
 
+::-webkit-scrollbar {
+    width: 0.5em;
+    /* background: #000000; */
+  }
+  ::-webkit-scrollbar-track {
+    border-radius: 100vh;
+  }
+  ::-webkit-scrollbar-thumb {
+    /* background-image: url(./assets/images/ripple.gif); */
+    background-color: black;
+    background-position: center;
+    border: 1px solid white;
+    border-radius: 100vh;
+  }
+  
+body {
+    filter: blur(100px);
+    transition: filter 0.5s;
+}
 
 .triangle-up {
     width: 0;
     height: 0;
-    border-left: 10px solid transparent;  
-    border-right: 10px solid transparent;
+    border-left: 7px solid transparent;  
+    border-right: 7px solid transparent;
 
-    border-bottom: 10px solid black;
+    border-bottom: 7px solid black;
 }
 .triangle-down {
     width: 0;
     height: 0;
-    border-left: 10px solid transparent;
-    border-right: 10px solid transparent;
+    border-left: 7px solid transparent;
+    border-right: 7px solid transparent;
 
-    border-top: 10px solid black;
+    border-top: 7px solid black;
 }
+
+

@@ -10,17 +10,34 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1" />
         <script src="https://cdn.tailwindcss.com"></script>
         <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
-        
+        <style>
+            ::-webkit-scrollbar {
+                width: 0.5em;
+                /* background: #000000; */
+              }
+              ::-webkit-scrollbar-track {
+                border-radius: 100vh;
+              }
+              ::-webkit-scrollbar-thumb {
+                /* background-image: url(./assets/images/ripple.gif); */
+                background-color: black;
+                background-position: center;
+                border: 1px solid white;
+                border-radius: 100vh;
+              }
+              
+            body {
+                filter: blur(100px);
+                transition: filter 0.5s;
+            }
+        </style>
         <!-- Define the user variable -->
         <script type="text/javascript">
+            window.onload = function() {
+                document.body.style.filter = 'none';
+            };
             // let user = '{{ user_is_authenticated|yesno:"AuthenticatedUser,AnonymousUser" }}';
             let user = '{{request.user}}';
-            document.addEventListener('DOMContentLoaded', function() {
-                if (user != 'AnonymousUser') {
-                    document.getElementById('login_btn').style.display = "none";
-                }
-            });
-            
 
             function getToken(name) {
                 let cookieValue = null;
