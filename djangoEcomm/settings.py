@@ -75,6 +75,13 @@ TEMPLATES = [
 WSGI_APPLICATION = 'djangoEcomm.wsgi.application'
 
 
+AUTHENTICATION_BACKENDS = (
+    'ecommerce.loginbackend.EmailOrUsernameModelBackend',
+    'django.contrib.auth.backends.ModelBackend'
+)
+
+AUTH_USER_MODEL = 'ecommerce.Customer'
+
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 

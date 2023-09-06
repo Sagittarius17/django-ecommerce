@@ -5,7 +5,7 @@
         <meta charset="utf-8">
         <link rel="icon" href="{% static 'images/favicon.ico' %}" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>Ecommerce</title>
+        <title>{% block title %} Ahgnis {% endblock %}</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1" />
         <script src="https://cdn.tailwindcss.com"></script>
@@ -88,7 +88,7 @@
         <div class="mt-16 w-[80%]">
             {% block content %}
 
-            {% endblock content %}
+            {% endblock %}
         </div>
         
         <script type="text/javascript" src="{% static 'js/cart.js' %}"></script>

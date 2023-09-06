@@ -1,20 +1,18 @@
 {% extends "ecommerce/main.html" %}
 {% load static %}
+{% block title %} Ecommerce | Register {% endblock %}
 {% block content %}
-
-<div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+<div class="relative left-[25%] rounded-md w-1/2 flex items-center justify-center text-black bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
     <div class="max-w-md w-full">
-        <div>
-            <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
-                Create an account
-            </h2>
-            <p class="mt-2 text-center text-sm text-gray-600">
-                Or <a href="{% url 'login' %}" class="font-medium text-blue-600 hover:text-blue-500">
-                login to your account
-                </a>
-            </p>
-        </div>
-        <form class="mt-8 space-y-6">
+        <h2 class="text-center text-3xl font-extrabold text-gray-900">
+            Create an account
+        </h2>
+        <p class="mt-2 text-center text-sm text-gray-600">
+            Or <a href="{% url 'login' %}" class="font-medium text-blue-600 hover:text-blue-500">
+            login to your account
+            </a>
+        </p>
+        <form method="post" class="mt-8 space-y-2">
             <div>
                 <label for="username" class="sr-only">Username</label>
                 <input id="username" name="username" type="text" required class="block w-full p-3 rounded-md shadow-sm placeholder-gray-400 focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Username">
@@ -25,11 +23,15 @@
             </div>
             <div>
                 <label for="phone-number" class="sr-only">Phone Number</label>
-                <input id="phone-number" name="phone-number" type="tel" required class="block w-full p-3 rounded-md shadow-sm placeholder-gray-400 focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Phone Number">
+                <input id="phone_number" name="phone-number" type="tel" required class="block w-full p-3 rounded-md shadow-sm placeholder-gray-400 focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Phone Number">
             </div>
             <div>
                 <label for="password" class="sr-only">Password</label>
                 <input id="password" name="password" type="password" required class="block w-full p-3 rounded-md shadow-sm placeholder-gray-400 focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Password">
+            </div>
+            <div>
+                <label for="confirm_password" class="sr-only">Confirm password</label>
+                <input id="confirm_password" name="confirm_password" type="password" required class="block w-full p-3 rounded-md shadow-sm placeholder-gray-400 focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Confirm password">
             </div>
             <div>
                 <button type="submit" class="group w-full py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">

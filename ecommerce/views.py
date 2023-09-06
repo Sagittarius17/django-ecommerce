@@ -1,19 +1,57 @@
-from django.shortcuts import render
+import json
+import datetime
+from .utils import *
 from .models import *
 from django.http import JsonResponse
-import json
+from django.http import HttpResponseRedirect
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login
 from django.views.decorators.csrf import csrf_exempt
-import datetime
-from .utils import cookieCart, cookieData, guestOrder
 
-# Create your views here.)
+# Create your views here.
 
+@csrf_exempt
 def login(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return HttpResponseRedirect('ecommerce/store.html')
     context = {}
     return render(request, 'ecommerce/login.html', context)
 
+@csrf_exempt
 def register(request):
     context = {}
+    
+    if request.method == 'POST':
+        # Extract data directly from request.POST
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        phone_number = request.POST.get('phone_number')
+        password = request.POST.get('password')
+        confirm_password = request.POST.get('confirm_password')
+
+        # Basic validation: check if all fields are present
+        if not all([username, email, phone_number, password, confirm_password]):
+            context['error'] = "Please fill all the fields."
+        # Check if passwords match
+        elif password != confirm_password:
+            context['error'] = "Passwords do not match."
+        else:
+            # Check if a user with the given email/username exists
+            if User.objects.filter(email=email).exists():
+                context['error'] = "Email already in use."
+            elif User.objects.filter(username=username).exists():
+                context['error'] = "Username already in use."
+            else:
+                # Create a new user
+                user = User.objects.create_user(username=username, email=email, phone_number=phone_number, password=password)
+                user.save()
+                return redirect('ecommerce/store.html')  # Redirect to desired URL after registration
+
     return render(request, 'ecommerce/register.html', context)
 
 def store(request):

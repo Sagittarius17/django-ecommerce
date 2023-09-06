@@ -7,7 +7,7 @@ def cookieCart(request):
     except:
         cart = ()
         
-    # print('Cart:', cart)
+    print('Cart:', cart)
     items = []
     order = {'get_cart_total':0, 'get_cart_items':0, 'shipping': False}
     cartItems = order['get_cart_items']
@@ -79,6 +79,5 @@ def guestOrder(request, data):
             product = product,
             order = order,
             quantity = item['quantity'],
-            # price = item['product']['price']
         )
     return customer, order

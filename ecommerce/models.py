@@ -1,14 +1,53 @@
 from django.db import models
+from django.conf import settings
 from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 # Create your models here.
 
-class Customer(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
-    name = models.CharField(max_length=200, null=True)
-    email = models.CharField(max_length=200, null=True)
+
+class CustomUserManager(BaseUserManager):
+    def create_user(self, email, full_name, phn_number, password=None):
+        if not email:
+            raise ValueError('Users must have an email address')
+        
+        user = self.model(
+            email=self.normalize_email(email),
+            full_name=full_name,
+            phn_number=phn_number,
+        )
+
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+class Customer(AbstractBaseUser):
+    # user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,  # Use the custom user model
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True
+    )
+    username = models.CharField(max_length=255, null=True)
+    email = models.EmailField(unique=True, null=True)
+    phn_number = models.CharField(max_length=20, null=True)
+    password = models.CharField(max_length=255, null=True)
+
+    objects = CustomUserManager()
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['full_name', 'number']
     
     def __str__(self):
-        return self.name
+        return self.username
+
+# class Customer(models.Model):
+#     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
+#     name = models.CharField(max_length=200, null=True)
+#     email = models.CharField(max_length=200, null=True)
+    
+#     def __str__(self):
+#         return self.name
     
 class Product(models.Model):
     name = models.CharField(max_length=200, null=True)
