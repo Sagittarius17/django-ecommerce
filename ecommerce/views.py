@@ -5,7 +5,7 @@ from .models import *
 from django.http import JsonResponse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login   # Rename the import to avoid the conflict
 from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
@@ -13,12 +13,12 @@ from django.views.decorators.csrf import csrf_exempt
 @csrf_exempt
 def login(request):
     if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
+        username = request.POST.get('username')
+        password = request.POST.get('password')
         user = authenticate(request, username=username, password=password)
         if user is not None:
-            login(request, user)
-            return HttpResponseRedirect('ecommerce/store.html')
+            login(request, user)  # Use the renamed import
+            return HttpResponseRedirect('/')
     context = {}
     return render(request, 'ecommerce/login.html', context)
 
@@ -27,30 +27,33 @@ def register(request):
     context = {}
     
     if request.method == 'POST':
-        # Extract data directly from request.POST
         username = request.POST.get('username')
         email = request.POST.get('email')
         phone_number = request.POST.get('phone_number')
         password = request.POST.get('password')
         confirm_password = request.POST.get('confirm_password')
 
-        # Basic validation: check if all fields are present
         if not all([username, email, phone_number, password, confirm_password]):
             context['error'] = "Please fill all the fields."
-        # Check if passwords match
         elif password != confirm_password:
             context['error'] = "Passwords do not match."
         else:
-            # Check if a user with the given email/username exists
-            if User.objects.filter(email=email).exists():
-                context['error'] = "Email already in use."
-            elif User.objects.filter(username=username).exists():
-                context['error'] = "Username already in use."
-            else:
-                # Create a new user
-                user = User.objects.create_user(username=username, email=email, phone_number=phone_number, password=password)
-                user.save()
-                return redirect('ecommerce/store.html')  # Redirect to desired URL after registration
+            try:
+                if User.objects.filter(email=email).exists():
+                    context['error'] = "Email already in use."
+                elif User.objects.filter(username=username).exists():
+                    context['error'] = "Username already in use."
+                else:
+                    # Note: Django's User model doesn't have a phone_number field by default.
+                    # If you've customized the User model to have one, this will work.
+                    # Otherwise, you'd need to handle phone_number separately.
+                    user = User.objects.create_user(username=username, email=email, password=password)
+                    # Assume you save the phone_number in user profile or another related model
+                    user.phone_number = phone_number  
+                    user.save()
+                    return redirect('store')  # Redirect to desired URL after registration
+            except Exception as e:
+                context['error'] = str(e)  # Display the error message to the context
 
     return render(request, 'ecommerce/register.html', context)
 

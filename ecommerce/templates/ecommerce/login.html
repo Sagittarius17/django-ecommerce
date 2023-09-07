@@ -3,6 +3,9 @@
 {% block title %} Ecommerce | Login {% endblock %}
 
 {% block content %}
+{% if error %}
+    <div class="flex w-full fixed bg-red-400 text-center justify-center left-0 top-14 items-center text-lg h-10">{{ error }}</div>
+{% endif %}
 <div class="flex relative justify-center top-20 px-4 sm:px-6">
     <div class="bg-white rounded-md p-3">
         <div>
@@ -18,7 +21,7 @@
         <form method="post" class="space-y-6">
             <div id='user-info' class='flex flex-col text-black bg-orange-300 rounded-md h-fit p-2 my-4'>
                 <div class='mb-2'>
-                    <input required class="p-2 border rounded w-full" type='text' name='name' placeholder='Name'>
+                    <input required class="p-2 border rounded w-full" type='text' name='username' placeholder='Username or Email or Phone no.'>
                 </div>
     
                 <div class=''>
