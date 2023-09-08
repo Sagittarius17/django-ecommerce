@@ -5,7 +5,7 @@ from .models import *
 from django.http import JsonResponse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login   # Rename the import to avoid the conflict
+from django.contrib.auth import authenticate, login as auth_login   # Rename the import to avoid the conflict
 from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
@@ -17,7 +17,7 @@ def login(request):
         password = request.POST.get('password')
         user = authenticate(request, username=username, password=password)
         if user is not None:
-            login(request, user)  # Use the renamed import
+            auth_login(request, user)  # Use the renamed import
             return HttpResponseRedirect('/')
     context = {}
     return render(request, 'ecommerce/login.html', context)

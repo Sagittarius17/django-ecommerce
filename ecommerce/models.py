@@ -6,13 +6,13 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 
 
 class CustomUserManager(BaseUserManager):
-    def create_user(self, email, full_name, phone_number, password=None):
+    def create_user(self, email, username, phone_number, password=None):
         if not email:
             raise ValueError('Users must have an email address')
         
         user = self.model(
             email=self.normalize_email(email),
-            full_name=full_name,
+            username=username,
             phone_number=phone_number,
         )
 
@@ -36,7 +36,7 @@ class Customer(AbstractBaseUser):
     objects = CustomUserManager()
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['full_name', 'number']
+    REQUIRED_FIELDS = ['email', 'phone_number']
     
     def __str__(self):
         return self.username

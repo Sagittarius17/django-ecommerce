@@ -22,14 +22,14 @@
         <!-- Desktop menu -->
         <div class="hidden sm:block sm:ml-6">
           <div class="flex space-x-4">
-            <a href="{% url 'login' %}" id='login_btn' class="flex text-black items-center hover:bg-gray-400 transition duration-300 px-2 py-1 rounded-sm text-lg font-medium">
+            <a href="{% url 'login' %}" id='login_btn' class="flex h-14 text-black items-center hover:bg-gray-400 transition duration-300 px-2 py-1 text-lg font-medium">
               <span>Login</span>
             </a>
-            <a href="#" id='user_profile' class="flex text-black items-center hover:bg-gray-400 transition duration-300 pl-2 py-1 rounded-sm text-lg font-medium">
+            <a href="#" id='user_profile' class="flex h-14 text-black items-center hover:bg-gray-400 transition duration-300 pl-2 py-1 text-lg font-medium">
                 <img src="https://static-assets-web.flixcart.com/batman-returns/batman-returns/p/images/profile-815786.svg" alt="" class="">
                 <span class='ml-1 pr-2'>{{request.user.customer}}</span>
             </a>
-            <a href="{% url 'cart' %}" class="flex text-black hover:bg-gray-400 transition duration-300 px-2 py-1 rounded-sm text-lg font-medium">
+            <a href="{% url 'cart' %}" class="flex h-14 text-black items-center hover:bg-gray-400 transition duration-300 px-2 py-1 text-lg font-medium">
                 <img class="relative w-6 h-6 top-1" src="{% static 'images/cart-check.png' %}">
                 <span class='ml-1'>Cart</span>
                 <p class='absolute top-2 -right-2 text-sm bg-yellow-600 w-5 h-5 text-center rounded-full'>{{cartItems}}</p>
