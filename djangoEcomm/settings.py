@@ -87,8 +87,13 @@ WSGI_APPLICATION = 'djangoEcomm.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        ### SQLite3
+        # 'ENGINE': 'django.db.backends.sqlite3',
+        # 'NAME': BASE_DIR / 'db.sqlite3',
+        
+        ### mongodb
+        'ENGINE': 'djongo',
+        'NAME': BASE_DIR / 'ecom.db',
     }
 }
 
