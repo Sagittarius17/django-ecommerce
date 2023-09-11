@@ -1,5 +1,8 @@
 import sqlite3
 
+conn = sqlite3.connect('db.sqlite3')
+c = conn.cursor()
+
 # def inspect_and_fix_invalid_foreign_keys(conn):
 #     c = conn.cursor()
 
@@ -22,8 +25,7 @@ import sqlite3
 
 #     print(f"Deleted {c.rowcount} problematic rows from ecommerce_shippingaddress.")
 
-conn = sqlite3.connect('db.sqlite3')
-c = conn.cursor()
+
 
 table_name = input("Enter table name: ")
 id = input("Enter id: ")
@@ -53,6 +55,8 @@ print(f'We have deleted {c.rowcount} records from the table {table_name}.')
 #     print(f"Record with id {record_id} copied successfully!")
 # else:
 #     print(f"No record found with id {record_id} in source_table.")
+
+
 
 # Commit the changes to db			
 conn.commit()

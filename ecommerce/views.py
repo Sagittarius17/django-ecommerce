@@ -5,21 +5,30 @@ from .models import *
 from django.http import JsonResponse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login as auth_login   # Rename the import to avoid the conflict
+from django.contrib.auth import authenticate, login  # Rename the import to avoid the conflict
 from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
 
 @csrf_exempt
 def login(request):
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            auth_login(request, user)  # Use the renamed import
-            return HttpResponseRedirect('/')
     context = {}
+    if request.method == "POST":
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        
+        # Use email to get the related user's username
+        try:
+            customer = Customer.objects.get(username=username)
+            user = authenticate(request, username=customer.user.username, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect('store')  # Redirect to desired URL after login
+            else:
+                context['error'] = "Invalid login credentials."
+        except Customer.DoesNotExist:
+            context['error'] = "Email not registered."
     return render(request, 'ecommerce/login.html', context)
 
 @csrf_exempt
@@ -44,14 +53,18 @@ def register(request):
                 elif User.objects.filter(username=username).exists():
                     context['error'] = "Username already in use."
                 else:
-                    # Note: Django's User model doesn't have a phone_number field by default.
-                    # If you've customized the User model to have one, this will work.
-                    # Otherwise, you'd need to handle phone_number separately.
-                    user = User.objects.create_user(username=username, email=email, password=password)
-                    # Assume you save the phone_number in user profile or another related model
-                    user.phone_number = phone_number  
-                    user.save()
-                    return redirect('store')  # Redirect to desired URL after registration
+                    # user = User.objects.create_user(username=username, email=email, password=password)
+
+                    # Create a Customer instance after creating the User
+                    Customer.objects.create(
+                        # user=user,
+                        username=username,
+                        email=email,
+                        phone_number=phone_number,
+                        password=password  # Storing raw passwords is not secure; consider hashing.
+                    )
+
+                    return redirect('login')  # Redirect to desired URL after registration
             except Exception as e:
                 context['error'] = str(e)  # Display the error message to the context
 
