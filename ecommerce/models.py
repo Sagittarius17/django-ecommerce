@@ -4,22 +4,6 @@ from django.contrib.auth.models import User
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 # Create your models here.
 
-
-# class CustomUserManager(BaseUserManager):
-#     def create_user(self, email, username, phone_number, password=None):
-#         if not email:
-#             raise ValueError('Users must have an email address')
-        
-#         user = self.model(
-#             email=self.normalize_email(email),
-#             username=username,
-#             phone_number=phone_number,
-#         )
-
-#         user.set_password(password)
-#         user.save(using=self._db)
-#         return user
-
 class Customer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
     username = models.CharField(max_length=255, null=True)

@@ -5,8 +5,9 @@ from .models import *
 from django.http import JsonResponse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login  # Rename the import to avoid the conflict
+from django.contrib.auth import authenticate, login as user_login # Rename the import to avoid the conflict
 from django.views.decorators.csrf import csrf_exempt
+from django.db.models import Q
 
 # Create your views here.
 
@@ -14,27 +15,35 @@ from django.views.decorators.csrf import csrf_exempt
 def login(request):
     context = {}
     if request.method == "POST":
-        username = request.POST.get('username')
-        email = request.POST.get('email')
+        identifier = request.POST.get('identifier')  # this will serve as either username, email or phone number
         password = request.POST.get('password')
         
-        # Use email to get the related user's username
+        # Check against username, email, and phone number fields in the Customer model
         try:
-            customer = Customer.objects.get(username=username)
-            user = authenticate(request, username=customer.user.username, password=password)
-            if user is not None:
-                login(request, user)
-                return redirect('store')  # Redirect to desired URL after login
+            # Since username and email fields are unique, you can use 'get' safely.
+            # For phone numbers, make sure it's unique or use a filter and get the first result.
+            customer = Customer.objects.filter(
+                Q(username=identifier) | Q(email=identifier) | Q(phone_number=identifier)
+            ).first()
+
+            if customer:
+                user = authenticate(request, username=customer.username, password=customer.password)
+                if user is not None:
+                    user_login(request, user)
+                    return redirect('store')  # Redirect to desired URL after login
+                else:
+                    context['error'] = "Invalid password."
             else:
-                context['error'] = "Invalid login credentials."
+                context['error'] = "No account associated with this identifier."
+
         except Customer.DoesNotExist:
-            context['error'] = "Email not registered."
+            context['error'] = "No account found."
+
     return render(request, 'ecommerce/login.html', context)
 
 @csrf_exempt
 def register(request):
     context = {}
-    
     if request.method == 'POST':
         username = request.POST.get('username')
         email = request.POST.get('email')
