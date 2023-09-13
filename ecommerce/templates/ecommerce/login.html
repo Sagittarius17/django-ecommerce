@@ -4,7 +4,7 @@
 
 {% block content %}
 {% if error %}
-    <div class="flex w-full fixed bg-red-400 text-center justify-center left-0 top-14 items-center text-lg h-10">{{ error }}</div>
+    <div id="login_err" class="flex w-full fixed bg-red-400 text-center justify-center left-0 top-14 items-center text-lg h-10">{{ error }}</div>
 {% endif %}
 <div class="flex relative justify-center top-20 px-4 sm:px-6">
     <div class="bg-white rounded-md p-3">
@@ -37,5 +37,17 @@
     </div>
 </div>
 
+<script>
+
+    // Step 1: Select the element
+    let hideErr = document.querySelector('#login_err');  // replace 'elementId' with your element's id
+
+    // Step 2: Add an event listener
+    hideErr.addEventListener('click', function() {
+        // Step 3: Set the display style to 'none' in the callback
+        hideErr.style.display = 'none';
+    });
+
+</script>
 
 {% endblock content %}
