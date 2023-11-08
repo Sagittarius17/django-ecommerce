@@ -9,22 +9,39 @@ from django.contrib.auth import authenticate, login as user_login # Rename the i
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Q
 import hashlib
+from django.contrib.auth.backends import ModelBackend
 
 # Create your views here.
+class CustomAuthBackend(ModelBackend):
+    def authenticate(self, request, username=None, password=None, **kwargs):
+        try:
+            # Lookup the user by email or phone_number
+            user = Customer.objects.get(Q(email=username) | Q(phone_number=username))
+            # Verify the password
+            if user.check_password(password):
+                return user.user
+        except Customer.DoesNotExist:
+            return None
 
+    def get_user(self, user_id):
+        try:
+            return Customer.objects.get(pk=user_id).user
+        except Customer.DoesNotExist:
+            return None
+        
 @csrf_exempt
 def login(request):
     context = {}
     if request.method == "POST":
-        username = request.POST.get('username')  
+        identifier = request.POST.get('identifier')  # Change this to 'identifier'
         password = request.POST.get('password')
     
-        user = authenticate(request, username=username, password=password)
+        user = CustomAuthBackend().authenticate(request, username=identifier, password=password)
         if user is not None:
             user_login(request, user)
-            return redirect('store')  # Redirect to desired URL after login
+            return redirect('store')  # Redirect to the desired URL after login
         else:
-            context['error'] = "Invalid password."
+            context['error'] = "Invalid credentials."
     else:
         context['error'] = "No account associated with this identifier."
 

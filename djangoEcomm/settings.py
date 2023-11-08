@@ -76,7 +76,7 @@ WSGI_APPLICATION = 'djangoEcomm.wsgi.application'
 
 
 # AUTHENTICATION_BACKENDS = (
-#     'ecommerce.loginbackend.EmailOrUsernameModelBackend',
+#     'ecommerce.CustomAuthBackend',
 #     'django.contrib.auth.backends.ModelBackend'
 # )
 
