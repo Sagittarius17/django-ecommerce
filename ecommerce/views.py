@@ -13,25 +13,6 @@ import hashlib
 # Create your views here.
 
 @csrf_exempt
-def login(request):
-    context = {}
-    if request.method == "POST":
-        username = request.POST.get('username')  
-        password = request.POST.get('password')
-    
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            user_login(request, user)
-            return redirect('store')  # Redirect to desired URL after login
-        else:
-            context['error'] = "Invalid password."
-    else:
-        context['error'] = "No account associated with this identifier."
-
-    return render(request, 'ecommerce/login.html', context)
-
-
-@csrf_exempt
 def register(request):
     context = {}
     if request.method == 'POST':
@@ -68,6 +49,30 @@ def register(request):
                 context['error'] = str(e)  # Display the error message to the context
 
     return render(request, 'ecommerce/register.html', context)
+
+@csrf_exempt
+def login(request):
+    context = {}
+    if request.method == "POST":
+        username = request.POST.get('username')  
+        password = request.POST.get('password')
+    
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            user_login(request, user)
+            request.session['user_id'] = user.id  # Set user id in session
+            return redirect('store')  # Redirect to desired URL after login
+        else:
+            context['error'] = "Invalid password."
+    else:
+        context['error'] = "No account associated with this identifier."
+
+    return render(request, 'ecommerce/login.html', context)
+
+def logout(request):
+    if 'user_id' in request.session:
+        del request.session['user_id']
+    return redirect('store')
 
 def store(request):
     data = cookieCart(request)

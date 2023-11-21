@@ -35,6 +35,10 @@
                 <img class="relative w-5 h-5 mr-1" src="{% static 'images/loggedin.png' %}" alt="Logged in!">
                 <span class='ml-1 pr-2'>{{request.user.customer}}</span>
             </a>
+            <a href="{% url 'logout' %}" id='logout_btn' class="flex h-14 items-center hover:bg-gray-600 transition duration-300 px-2 py-1 text-lg font-medium">
+              <img class="relative w-5 h-5 mr-1" src="{% static 'images/login.png' %}" alt="">
+              <span>Logout</span>
+            </a>
           </div>
         </div>
         <!-- Mobile menu (hidden by default) -->
