@@ -1,0 +1,18 @@
+.effect {
+    background: linear-gradient(90deg, rgb(249, 189, 199), rgb(139, 139, 233), rgb(0, 255, 55), rgb(16, 16, 57), rgb(249, 189, 199));
+    background-repeat: repeat-x;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-size: 400% 100%;
+    animation: rgbEffect 3s linear infinite;
+}
+
+@keyframes rgbEffect {
+    0% {
+        background-position: 100% 50%
+    }
+
+    100% {
+        background-position: -33% 50%
+    }
+}

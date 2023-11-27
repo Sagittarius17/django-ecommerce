@@ -3,12 +3,9 @@ import datetime
 from .utils import *
 from .models import *
 from django.http import JsonResponse
-from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login as user_login # Rename the import to avoid the conflict
+from django.contrib.auth import authenticate, logout as auth_logout, login as user_login
 from django.views.decorators.csrf import csrf_exempt
-from django.db.models import Q
-import hashlib
 
 # Create your views here.
 
@@ -28,23 +25,16 @@ def register(request):
             context['error'] = "Passwords do not match."
         else:
             try:
-                if User.objects.filter(email=email).exists():
-                    context['error'] = "Email already in use."
-                elif User.objects.filter(username=username).exists():
-                    context['error'] = "Username already in use."
-                else:
-                    # user = User.objects.create_user(username=username, email=email, password=password)
+                user = User.objects.create_user(username=username, email=email, password=password)
+                customer = Customer.objects.create(
+                    user=user,
+                    username=username,
+                    email=email,
+                    phone_number=phone_number,
+                    password=password  # Storing raw passwords is not secure; consider hashing.
+                )
 
-                    # Create a Customer instance after creating the User
-                    Customer.objects.create(
-                        # user=user,
-                        username=username,
-                        email=email,
-                        phone_number=phone_number,
-                        password=password  # Storing raw passwords is not secure; consider hashing.
-                    )
-
-                    return redirect('login')  # Redirect to desired URL after registration
+                return redirect('login')  # Redirect to desired URL after registration
             except Exception as e:
                 context['error'] = str(e)  # Display the error message to the context
 
@@ -58,10 +48,19 @@ def login(request):
         password = request.POST.get('password')
     
         user = authenticate(request, username=username, password=password)
+
         if user is not None:
-            user_login(request, user)
-            request.session['user_id'] = user.id  # Set user id in session
-            return redirect('store')  # Redirect to desired URL after login
+            try:
+                # Check if the associated Customer instance exists
+                customer = user.customer
+            except Customer.DoesNotExist:
+                context['error'] = "User has no associated customer."
+
+            # Perform login only if the associated Customer exists
+            if 'error' not in context:
+                user_login(request, user)
+                request.session['user_id'] = user.customer.id  # Set user id in session
+                return redirect('store')  # Redirect to desired URL after login
         else:
             context['error'] = "Invalid password."
     else:
@@ -70,8 +69,7 @@ def login(request):
     return render(request, 'ecommerce/login.html', context)
 
 def logout(request):
-    if 'user_id' in request.session:
-        del request.session['user_id']
+    auth_logout(request)
     return redirect('store')
 
 def store(request):
