@@ -4,9 +4,9 @@
 
 {% block content %}
 
-{% comment %} {% if error %}
+{% if error %}
     <div id="login_err" class="flex w-full fixed bg-red-400 text-center justify-center left-0 top-14 items-center text-lg h-10">{{ error }}</div>
-{% endif %} {% endcomment %}
+{% endif %}
 
 <div class="flex relative justify-center top-20 px-4 sm:px-6">
     <div class="bg-slate-400 rounded-md p-3">
@@ -39,7 +39,7 @@
     </div>
 </div>
 
-{% comment %} <script>
+<script>
 
     let hideErr = document.querySelector('#login_err'); 
 
@@ -47,6 +47,6 @@
         hideErr.style.display = 'none';
     });
 
-</script> {% endcomment %}
+</script>
 
 {% endblock content %}

@@ -51,20 +51,20 @@ def login(request):
 
         if user is not None:
             try:
-                # Check if the associated Customer instance exists
+                # Try to get the associated Customer instance
                 customer = user.customer
             except Customer.DoesNotExist:
-                context['error'] = "User has no associated customer."
+                customer = None
 
-            # Perform login only if the associated Customer exists
-            if 'error' not in context:
+            # Perform login only if the user is associated with a Customer or if there is no associated Customer
+            if customer or customer is None:
                 user_login(request, user)
-                request.session['user_id'] = user.customer.id  # Set user id in session
+                request.session['user_id'] = user.customer.id if customer else None
                 return redirect('store')  # Redirect to desired URL after login
+            else:
+                context['error'] = "Invalid password."
         else:
-            context['error'] = "Invalid password."
-    else:
-        context['error'] = "No account associated with this identifier."
+            context['error'] = "No account associated with this identifier."
 
     return render(request, 'ecommerce/login.html', context)
 
