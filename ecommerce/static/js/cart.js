@@ -38,46 +38,32 @@ function addCookieItem(productId, action) {
     location.reload()
 }
 
-function updateUserOrder(productId, action) {
-    console.log('User logged in.')
+async function updateUserOrder(productId, action) {
+    console.log('User logged in.');
 
-    let url = '/update_item/'
+    const url = '/update_item/';
 
-    // fetch(url, {
-    //     method: "POST",
-    //     headers: {
-    //         'Content-Type':'application/json',
-    //         'X-CSRFToken': csrftoken
-    //     },
-    //     body: JSON.stringify({'productId': productId, 'action': action})
-    // })
-    // .then((response) => {
-    //     return response.json()
-    // })
-    // .then((data) => {
-    //     console.log('data:', data)
-    // })
+    try {
+        const response = await fetch(url, {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrftoken
+            },
+            body: JSON.stringify({ 'productId': productId, 'action': action })
+        });
 
-    fetch(url, {
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': csrftoken
-        },
-        body: JSON.stringify({'productId': productId, 'action': action})
-    })
-    .then((response) => {
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
-        return response.json();
-    })
-    .then((data) => {
+
+        const data = await response.json();
         console.log('data:', data);
-        location.reload()
-    })
-    .catch((error) => {
-        console.log('There was a problem with the fetch operation:', error.message);
-    });
+
+        // Reload the page to reflect changes
+        location.reload();
+    } catch (error) {
+        console.error('There was a problem with the fetch operation:', error.message);
+    }
 }
 
